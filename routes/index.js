@@ -57,4 +57,28 @@ router.get('/books/:bookId/delete', (req,res,next)=> {
     })
 })
 
+// Route "GET /books/:bookId/edit" to display the edit form
+router.get('/books/:bookId/edit', (req,res,next)=> {
+  Book.findById(req.params.bookId)
+    .then(bookFromDb => {
+      res.render('edit-book', {
+        book: bookFromDb
+      })
+    })
+})
+
+// Route "POST /books/:bookId/edit" to receive the form submission
+router.post('/books/:bookId/edit', (req,res,next)=> {
+  Book.findByIdAndUpdate(req.params.bookId, {
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    rating: req.body.rating,
+  })
+    .then(() => {
+      // Redirect to the detail page of the book
+      res.redirect('/books/'+req.params.bookId)
+    })
+})
+
 module.exports = router;

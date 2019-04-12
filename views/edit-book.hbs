@@ -1,0 +1,18 @@
+<h1>Edit the book</h1>
+
+{{!-- Send the data to "POST /create-book" --}}
+<form action="/books/{{book._id}}/edit" method="post">
+  Title
+  <input type="text" value="{{book.title}}" name="title" class="form-control">{{!-- Will define a req.body.title --}}
+  <br>
+  Description
+  <textarea name="description" class="form-control">{{book.description}}</textarea> {{!-- Will define a req.body.description :D --}} 
+  <br>
+  Author
+  <input type="text" value="{{book.author}}" name="author" class="form-control">{{!-- Will define a req.body.author --}}
+  <br>
+  Rating
+  <input type="number" value="{{book.rating}}" name="rating" min="1" max="10" class="form-control">{{!-- Will define a req.body.rating --}}
+  <br>
+  <button type="submit" class="btn btn-primary">Edit!</button>
+</form>
