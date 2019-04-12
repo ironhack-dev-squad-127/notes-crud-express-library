@@ -1,23 +1,50 @@
 const express = require('express');
 const router  = express.Router();
-const Book = require('../models/book')
+const Book = require('../models/Book')
+const Editor = require('../models/Editor')
 
-/* GET home page */
+// // Home page with only books (and no editors)
+// router.get('/', (req, res, next) => {
+//   Book.find()
+//     .then(books => {
+//       // Render "views/index.hbs" and give a variable "books" that is "books" (from then) 
+//       res.render('index', { 
+//         books: books,
+//         message: req.query.msg
+//       })
+//     })
+// })
+
+// Home page with only books and editors
 router.get('/', (req, res, next) => {
-  Book.find()
-    .then(books => {
+  Promise.all([Book.find(), Editor.find()])
+    .then(arrayOfResults => {
+      let books = arrayOfResults[0]
+      let editors = arrayOfResults[1]
       // Render "views/index.hbs" and give a variable "books" that is "books" (from then) 
       res.render('index', { 
         books: books,
+        editors: editors,
         message: req.query.msg
       })
     })
-});
+})
 
-// Example: http://localhost:3000/books/5caf71777412fd8c8759ce80
+// // Book detail page without editor
+// router.get('/books/:bookId', (req,res,next) => {
+//   console.log("The id is", req.params.bookId)
+//   Book.findById(req.params.bookId)
+//     .then(bookFromDb => {
+//       res.render('book-detail', {
+//         book: bookFromDb
+//       })
+//     })
+// })
+
+// Book detail page with editor
 router.get('/books/:bookId', (req,res,next) => {
-  console.log("The id is", req.params.bookId)
   Book.findById(req.params.bookId)
+    .populate('_editor') // Replace the field "_editor" (that was an id) by the editor document
     .then(bookFromDb => {
       res.render('book-detail', {
         book: bookFromDb
@@ -25,9 +52,19 @@ router.get('/books/:bookId', (req,res,next) => {
     })
 })
 
-// Route GET /create-book to display the form to add a book
+// // Route GET /create-book to display the form to add a book (without editor)
+// router.get('/create-book', (req,res,next)=> {
+//   res.render('create-book') // render "views/create-book.hbs"
+// })
+
+// Route GET /create-book to display the form to add a book (with editor)
 router.get('/create-book', (req,res,next)=> {
-  res.render('create-book') // render "views/create-book.hbs"
+  Editor.find()
+    .then(editorsFromDb => {
+      res.render('create-book', {
+        editors: editorsFromDb
+      })
+    })
 })
 
 // Route POST /create-book to receive the form submission
@@ -39,6 +76,7 @@ router.post('/create-book', (req,res,next)=> {
     description: req.body.description,
     author: req.body.author,
     rating: req.body.rating,
+    _editor: req.body._editor
   })
   .then(createdBook => {
     console.log("The book was created, you are going to be redirected")
@@ -78,6 +116,21 @@ router.post('/books/:bookId/edit', (req,res,next)=> {
     .then(() => {
       // Redirect to the detail page of the book
       res.redirect('/books/'+req.params.bookId)
+    })
+})
+
+
+// Detail page of an editor
+router.get('/editors/:editorId', (req,res,next) => {
+  Promise.all([
+    Editor.findById(req.params.editorId),
+    Book.find({ _editor: req.params.editorId }),
+  ])
+    .then(([editorFromDb, booksFromDb]) => {
+      res.render('editor-detail', {
+        editor: editorFromDb,
+        books: booksFromDb,
+      })
     })
 })
 

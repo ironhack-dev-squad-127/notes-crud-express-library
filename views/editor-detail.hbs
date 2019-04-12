@@ -1,0 +1,12 @@
+<h1>Editor Detail</h1>
+
+<p><strong>Name</strong>: {{editor.name}}</p>
+
+<p>
+  <strong>Books</strong>: 
+  <ul>
+    {{#each books}}
+      <li><a href="/books/{{this.id}}">{{this.title}}</a></li>
+    {{/each}}
+  </ul>
+</p>

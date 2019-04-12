@@ -4,6 +4,7 @@
 <p><strong>Description</strong>: {{book.description}}</p> 
 <p><strong>Author</strong>: {{book.author}}</p> 
 <p><strong>Rating</strong>: {{book.rating}}</p> 
+<p><strong>Editor</strong>: <a href="/editors/{{book._editor._id}}">{{book._editor.name}}</a></p> 
 
 <a href="/books/{{book._id}}/edit" class="btn btn-outline-primary">Edit</a>
 <a href="/books/{{book._id}}/delete" class="btn btn-outline-danger">Delete</a>

@@ -5,9 +5,16 @@
     <li><a href="/books/{{this._id}}">{{this.title}}</a></li>
   {{/each}}
   </ul>
-</div>
 
-{{!-- Display the message if we have one --}}
-{{#if message}}
-  <div class="alert alert-primary">{{message}}</div>
-{{/if}}
+  <h1>The editors</h1>
+  <ul>
+  {{#each editors}}
+    <li><a href="/editors/{{this._id}}">{{this.name}}</a></li>
+  {{/each}}
+  </ul>
+
+  {{!-- Display the message if we have one --}}
+  {{#if message}}
+    <div class="alert alert-primary">{{message}}</div>
+  {{/if}}
+</div>
