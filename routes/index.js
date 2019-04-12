@@ -29,13 +29,18 @@ router.get('/create-book', (req,res,next)=> {
 
 // Route POST /create-book to receive the form submission
 router.post('/create-book', (req,res,next)=> {
+  // Because the info was sent with a post form, we can access data with `req.body`
   console.log("req.body", req.body)
+  Book.create({
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    rating: req.body.rating,
+  })
+  .then(createdBook => {
+    console.log("The book was created, you are going to be redirected")
+    res.redirect('/books/'+createdBook._id)
+  })
 })
-
-
-
-router.get('/surprise', (req, res, next) => {
-  next(42)
-});
 
 module.exports = router;
