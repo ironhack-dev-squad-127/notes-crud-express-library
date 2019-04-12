@@ -7,7 +7,10 @@ router.get('/', (req, res, next) => {
   Book.find()
     .then(books => {
       // Render "views/index.hbs" and give a variable "books" that is "books" (from then) 
-      res.render('index', { books: books })
+      res.render('index', { 
+        books: books,
+        message: req.query.msg
+      })
     })
 });
 
@@ -41,6 +44,17 @@ router.post('/create-book', (req,res,next)=> {
     console.log("The book was created, you are going to be redirected")
     res.redirect('/books/'+createdBook._id)
   })
+})
+
+// http://localhost:3000/books/5cb094036aaa14adaf3ec765/delete
+router.get('/books/:bookId/delete', (req,res,next)=> {
+  // Delete the book and redirect the user to the home page when it's done
+  // Book.deleteOne({ _id: req.params.bookId }) // Solution 1
+  Book.findByIdAndDelete(req.params.bookId) // Solution 2
+    .then(deletedBook => {
+      // Redirect to the home page with a `req.query.msg`
+      res.redirect(`/?msg=The book "${deletedBook.title}" has been deleted`)
+    })
 })
 
 module.exports = router;

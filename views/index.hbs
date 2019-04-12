@@ -6,3 +6,8 @@
   {{/each}}
   </ul>
 </div>
+
+{{!-- Display the message if we have one --}}
+{{#if message}}
+  <div class="alert alert-primary">{{message}}</div>
+{{/if}}

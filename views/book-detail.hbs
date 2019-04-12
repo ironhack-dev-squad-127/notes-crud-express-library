@@ -5,4 +5,5 @@
 <p><strong>Author</strong>: {{book.author}}</p> 
 <p><strong>Rating</strong>: {{book.rating}}</p> 
 
-<a href="/">Go home</a>
+<a href="/books/{{book._id}}/edit" class="btn btn-outline-primary">Edit</a>
+<a href="/books/{{book._id}}/delete" class="btn btn-outline-danger">Delete</a>
