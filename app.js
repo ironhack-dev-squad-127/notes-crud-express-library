@@ -44,11 +44,25 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
+// Define a helper for HBS that can be used like this:
+// {{#ifEqual firstValue secondValue}}
+//   {{!-- The code to execute --}}
+// {{/ifEqual}}
+hbs.registerHelper('ifEqual', (v1, v2, options) => {
+	console.log("TCL: v1, v2", v1, v2)
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+})
 
 
-// default value for title local
-app.locals.title = 'Express - Generated with IronGenerator';
-
+// This middleware is executed for every route
+app.use((req,res,next) => {
+  // Define a variable "url" to the view
+  res.locals.url = req.url
+  next()
+})
 
 
 const index = require('./routes/index');
